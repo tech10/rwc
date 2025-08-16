@@ -1,0 +1,16 @@
+name: Update release
+
+on:
+  release:
+    types:
+      - created
+    tags:
+      - 'v*'
+
+jobs:
+  download:
+    name: Update proxied module version
+    runs-on: ubuntu-latest
+    steps:
+    - name: Pull new module version
+      uses: andrewslotin/go-proxy-pull-action@master

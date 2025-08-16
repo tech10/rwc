@@ -1,0 +1,16 @@
+version: 2
+project_name: rwc
+before:
+  hooks:
+    - go mod tidy
+builds:
+  -
+    skip: true
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^release:'
+source:
+  enabled: false

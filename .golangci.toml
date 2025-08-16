@@ -1,0 +1,92 @@
+version = '2'
+
+[run]
+tests = true
+
+[linters]
+default = 'none'
+enable = [
+  'asciicheck',
+  'bidichk',
+  'contextcheck',
+  'decorder',
+  'dogsled',
+  'dupl',
+  'dupword',
+  'errcheck',
+  'errname',
+  'errorlint',
+  'exhaustive',
+  'fatcontext',
+  'forcetypeassert',
+  'funcorder',
+  'funlen',
+  'ginkgolinter',
+  'gocheckcompilerdirectives',
+  'gochecksumtype',
+  'gocognit',
+  'goconst',
+  'gocritic',
+  'gocyclo',
+  'godot',
+  'goheader',
+  'govet',
+  'ineffassign',
+  'misspell',
+  'nakedret',
+  'nilerr',
+  'nilnil',
+  'nolintlint',
+  'prealloc',
+  'predeclared',
+  'revive',
+  'staticcheck',
+  'unconvert',
+  'unparam',
+  'unused',
+  'usestdlibvars',
+  'wastedassign',
+  'whitespace'
+]
+
+[linters.settings.staticcheck]
+checks = [
+  'all',
+  '-ST1001',
+  '-ST1003',
+  '-ST1005'
+]
+
+[linters.exclusions]
+generated = 'lax'
+presets = [
+  'comments',
+  'common-false-positives',
+  'legacy',
+  'std-error-handling'
+]
+paths = [
+  'third_party$',
+  'builtin$',
+  'examples$'
+]
+
+[issues]
+fix = true
+
+[formatters]
+enable = [
+  'gofumpt'
+]
+
+[formatters.settings]
+[formatters.settings.gofumpt]
+extra-rules = true
+
+[formatters.exclusions]
+generated = 'lax'
+paths = [
+  'third_party$',
+  'builtin$',
+  'examples$'
+]
