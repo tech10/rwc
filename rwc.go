@@ -4,22 +4,10 @@
 package rwc
 
 import (
-	"errors"
 	"io"
 	"sync"
 
 	"github.com/tech10/rwc/atomic"
-)
-
-var (
-	// ErrEqual is returned if attempting to reset ResReadWriteCloser
-	// with a value equal to that which already exists.
-	ErrEqual = errors.New("new ReadWriteCloser equal to old ReadWriteCloser")
-	// ErrResetNil is returned if attempting to reset ResReadWriteCloser with a nil value.
-	ErrResetNil = errors.New("nil reset not permitted")
-	// ErrRWCReset is returned by Read and Write functions on ResReadWriteCloser
-	// if it is reset during a read or write.
-	ErrRWCReset = errors.New("ReadWriteCloser reset")
 )
 
 // ResReadWriteCloser is a ReadWriteCloser who's io.ReadWriteCloser can be safely reset.
@@ -127,14 +115,19 @@ func (r *ResReadWriteCloser) Close() error {
 // You cannot reset it with nil, ErrResetNil will be returned.
 // You cannot reset it with a value equal to the existing io.ReadWriteCloser interface,
 // ErrEqual will be returned.
+// You cannot reset it to its own ResReadWriteCloser,
+// ErrEqualToSelf will be returned.
 //
 // If you set closeOld to true, the old io.ReadWriteCloser will be closed during the reset.
 // Setting closeOld to false could prove useful in certain situations,
 // such as resetting the ResReadWriteCloser with a custom ReadWriteCloser implementation
 // wrapping the one you originally used on creation.
 func (r *ResReadWriteCloser) Reset(newRWC io.ReadWriteCloser, closeOld bool) error {
-	if newRWC == nil {
+	switch newRWC {
+	case nil:
 		return ErrResetNil
+	case r:
+		return ErrEqualToSelf
 	}
 
 	r.mu.Lock()

@@ -103,6 +103,11 @@ func TestResetErrors(t *testing.T) {
 		t.Fatalf("expected ErrEqual, got %v", err)
 	}
 
+	// Reset with same ResReadWriteCloser
+	if err := r.Reset(r, true); !errors.Is(err, rwc.ErrEqualToSelf) {
+		t.Fatalf("expected ErrEqualToSelf, got %v", err)
+	}
+
 	// Reset with new RWC
 	if err := r.Reset(m2, true); err != nil {
 		t.Fatalf("unexpected error on valid reset: %v", err)
