@@ -14,7 +14,7 @@ import (
 // It implements the io.ReadWriteCloser interface.
 //
 // If its io.ReadWriteCloser is reset during a read or write operation,
-// the read or write operation will complete on the old connection unless the old connection is closed.
+// the read or write operation will complete on the old ReadWriteCloser unless the old ReadWriteCloser is closed.
 //
 // If the io.ReadWriteCloser is reset during a read or write call,
 // ErrRWCReset is returned along with the number of bytes read or written by the old reader.
@@ -60,7 +60,7 @@ func (r *ResReadWriteCloser) Read(p []byte) (int, error) {
 
 	n, err := reader.Read(p)
 
-	// Detect reset during read
+	// Detect reset after read
 	if startCount != r.count.Load() {
 		return n, ErrRWCReset
 	}
@@ -89,7 +89,7 @@ func (r *ResReadWriteCloser) Write(p []byte) (int, error) {
 
 	n, err := writer.Write(p)
 
-	// Detect reset during write
+	// Detect reset after write
 	if startCount != r.count.Load() {
 		return n, ErrRWCReset
 	}
